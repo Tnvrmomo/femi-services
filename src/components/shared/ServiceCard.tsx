@@ -1,7 +1,7 @@
 
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, Heart } from 'lucide-react';
+import { Star, Clock, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface ServiceCardProps {
@@ -15,78 +15,125 @@ interface ServiceCardProps {
     image: string;
     category: string;
     location: string;
+    duration?: string;
+    discount?: string | null;
   };
+  viewType?: string;
   className?: string;
 }
 
-const ServiceCard = ({ service, className }: ServiceCardProps) => {
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
-
-  const toggleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsFavorite(!isFavorite);
-  };
-
-  return (
-    <Link 
-      to={`/service/${service.id}`}
-      className={cn(
-        "block rounded-2xl overflow-hidden glass-card transition-all duration-300 group",
-        isHovered ? "shadow-lg scale-[1.02]" : "shadow-soft hover:shadow-md",
+const ServiceCard = ({ service, viewType = 'grid', className }: ServiceCardProps) => {
+  const { id, title, vendor, rating, reviews, price, image, location, category, duration, discount } = service;
+  
+  if (viewType === 'list') {
+    return (
+      <div className={cn(
+        "flex flex-col md:flex-row bg-white rounded-xl overflow-hidden shadow-soft transition-shadow hover:shadow-md",
         className
-      )}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="relative">
-        <div 
-          className="h-48 w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-          style={{ backgroundImage: `url(${service.image})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      )}>
+        <div className="relative md:w-1/3">
+          <img 
+            src={image} 
+            alt={title} 
+            className="w-full h-48 md:h-full object-cover"
+          />
+          {discount && (
+            <div className="absolute top-4 left-4 bg-rose-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+              {discount}
+            </div>
+          )}
         </div>
-        
-        <button 
-          onClick={toggleFavorite}
-          className={`absolute top-3 right-3 h-8 w-8 rounded-full flex items-center justify-center transition-all duration-300 ${
-            isFavorite 
-              ? 'bg-rose-500 text-white' 
-              : 'bg-white/80 backdrop-blur-sm text-muted-foreground hover:text-rose-500'
-          }`}
-          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-        >
-          <Heart className={`h-4 w-4 ${isFavorite ? 'fill-white' : ''}`} />
-        </button>
-        
-        <div className="absolute bottom-2 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
-          {service.category}
+        <div className="p-5 flex flex-col justify-between md:w-2/3">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-sm text-rose-600 font-medium">{category}</span>
+              <div className="flex items-center">
+                <Star className="h-4 w-4 fill-gold-500 text-gold-500 mr-1" />
+                <span className="text-sm font-medium">{rating}</span>
+                <span className="text-xs text-muted-foreground ml-1">({reviews})</span>
+              </div>
+            </div>
+            <h3 className="font-medium text-lg mb-1">{title}</h3>
+            <p className="text-muted-foreground text-sm mb-4">By {vendor}</p>
+            <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-4">
+              {duration && (
+                <div className="flex items-center">
+                  <Clock className="h-3.5 w-3.5 mr-1" />
+                  <span>{duration}</span>
+                </div>
+              )}
+              <div className="flex items-center">
+                <MapPin className="h-3.5 w-3.5 mr-1" />
+                <span>{location}</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xl font-semibold">৳ {price.toLocaleString()}</div>
+            </div>
+            <div className="flex space-x-3">
+              <Button variant="outline" size="sm">
+                View Details
+              </Button>
+              <Button size="sm" className="bg-rose-600 hover:bg-rose-700">
+                Add to Cart
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
-      
-      <div className="p-4 space-y-3">
-        <div className="flex justify-between items-start">
-          <h3 className="font-medium text-lg line-clamp-1 group-hover:text-primary transition-colors">
-            {service.title}
-          </h3>
-        </div>
-        
-        <p className="text-sm text-muted-foreground">{service.vendor} • {service.location}</p>
-        
-        <div className="flex items-center gap-1">
-          <Star className="h-4 w-4 fill-gold-500 text-gold-500" />
-          <span className="font-medium text-sm">{service.rating}</span>
-          <span className="text-muted-foreground text-xs">({service.reviews} reviews)</span>
-        </div>
-        
-        <div className="flex justify-between items-center pt-2">
-          <p className="font-semibold text-lg">
-            ৳{service.price.toLocaleString()}
-          </p>
-          <div className="bg-rose-50 text-rose-600 text-xs font-medium px-3 py-1 rounded-full">
-            Book Now
+    );
+  }
+  
+  return (
+    <Link 
+      to={`/service/${id}`}
+      className={cn(
+        "block rounded-xl overflow-hidden bg-white shadow-soft transition-shadow hover:shadow-md",
+        className
+      )}
+    >
+      <div className="relative">
+        <img 
+          src={image} 
+          alt={title} 
+          className="h-48 w-full object-cover transition-transform duration-500 hover:scale-105"
+        />
+        {discount && (
+          <div className="absolute top-4 left-4 bg-rose-600 text-white px-3 py-1 rounded-full text-xs font-medium">
+            {discount}
           </div>
+        )}
+      </div>
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-sm text-rose-600 font-medium">{category}</span>
+          <div className="flex items-center">
+            <Star className="h-4 w-4 fill-gold-500 text-gold-500 mr-1" />
+            <span className="text-sm font-medium">{rating}</span>
+            <span className="text-xs text-muted-foreground ml-1">({reviews})</span>
+          </div>
+        </div>
+        <h3 className="font-medium text-lg mb-1 line-clamp-1">{title}</h3>
+        <p className="text-muted-foreground text-sm mb-3">By {vendor}</p>
+        <div className="flex items-center space-x-4 text-xs text-muted-foreground mb-4">
+          {duration && (
+            <div className="flex items-center">
+              <Clock className="h-3 w-3 mr-1" />
+              <span>{duration}</span>
+            </div>
+          )}
+          <div className="flex items-center">
+            <MapPin className="h-3 w-3 mr-1" />
+            <span>{location}</span>
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="text-lg font-semibold">৳ {price.toLocaleString()}</div>
+          <Button size="sm" className="bg-rose-600 hover:bg-rose-700">
+            Add to Cart
+          </Button>
         </div>
       </div>
     </Link>
