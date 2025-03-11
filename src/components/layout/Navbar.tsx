@@ -34,7 +34,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center">
           <h1 className="font-serif text-2xl font-bold bg-gradient-to-r from-rose-600 to-lavender-600 bg-clip-text text-transparent">
-            Femi<span className="text-gold-500">Services</span>
+            Glow<span className="text-gold-500">Up</span>
           </h1>
         </Link>
 
@@ -48,6 +48,9 @@ const Navbar = () => {
           </Link>
           <Link to="/vendors" className="text-foreground hover:text-primary transition-colors">
             Vendors
+          </Link>
+          <Link to="/services" className="text-foreground hover:text-primary transition-colors">
+            Services
           </Link>
           <Link to="/about" className="text-foreground hover:text-primary transition-colors">
             About
@@ -134,6 +137,13 @@ const Navbar = () => {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Vendors
+              </Link>
+              <Link 
+                to="/services" 
+                className="text-foreground hover:text-primary transition-colors py-2 border-b border-muted"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Services
               </Link>
               <Link 
                 to="/about" 

@@ -11,7 +11,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* About */}
           <div className="space-y-4">
-            <h3 className="font-serif text-xl font-semibold text-foreground">FemiServices</h3>
+            <h3 className="font-serif text-xl font-semibold text-foreground">GlowUp</h3>
             <p className="text-muted-foreground leading-relaxed">
               Connecting women-centric businesses with customers, providing a platform for beauty, events, baking and more.
             </p>
@@ -48,6 +48,9 @@ const Footer = () => {
                 <Link to="/vendors" className="text-muted-foreground hover:text-primary transition-colors">Vendors</Link>
               </li>
               <li>
+                <Link to="/services" className="text-muted-foreground hover:text-primary transition-colors">Services</Link>
+              </li>
+              <li>
                 <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About Us</Link>
               </li>
               <li>
@@ -73,7 +76,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-rose-500" />
-                <span className="text-muted-foreground">info@femiservices.com</span>
+                <span className="text-muted-foreground">info@glowup.com</span>
               </li>
             </ul>
           </div>
@@ -98,7 +101,7 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="border-t border-muted py-6 text-center">
           <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} FemiServices. All rights reserved.
+            © {new Date().getFullYear()} GlowUp. All rights reserved.
           </p>
         </div>
       </div>
